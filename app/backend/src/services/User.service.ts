@@ -11,16 +11,16 @@ export default class UserService {
   static async login(data: Login) {
     const { email, password } = data;
 
-    const findUser = await User.findAll({ where: { email } });
+    const findUser = await User.findOne({ where: { email } });
 
-    if (!findUser || findUser.length === 0) {
+    if (!findUser) {
       return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
     }
-    const checkPassword = bcrypt.compareSync(password, findUser[0].dataValues.password);
+    const checkPassword = bcrypt.compareSync(password, findUser.dataValues.password);
     if (!checkPassword) {
       return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
     }
-    const { password: _pass, ...userWithoutPassword } = findUser[0].dataValues;
+    const { password: _pass, ...userWithoutPassword } = findUser.dataValues;
     const token = createToken(userWithoutPassword);
     return { type: null, message: token };
   }
