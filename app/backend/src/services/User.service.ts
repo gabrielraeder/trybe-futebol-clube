@@ -10,10 +10,8 @@ export default class UserService {
 
   static async login(data: Login) {
     const { email, password } = data;
-    console.log(data);
 
     const findUser = await User.findAll({ where: { email } });
-    console.log(findUser);
 
     if (!findUser || findUser.length === 0) {
       return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
