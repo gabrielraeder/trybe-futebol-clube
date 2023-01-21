@@ -11,4 +11,14 @@ export default class MatchService {
     });
     return matches;
   }
+
+  static async getByQuery(query: string) {
+    const inProgress = query === 'true';
+    const matches = await Match.findAll({ where: { inProgress },
+      include: [
+        { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'awayTeam', attributes: { exclude: ['id'] } },
+      ] });
+    return matches;
+  }
 }
