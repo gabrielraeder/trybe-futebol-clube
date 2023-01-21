@@ -5,7 +5,6 @@ import * as bcrypt from 'bcryptjs';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
 import User from '../database/models/User.model';
 import { jwtVerifiedMock, mockedToken, userSuccessMock } from './mocks/user.mocks';
 import * as auth from '../auth/jwtFunctions';
