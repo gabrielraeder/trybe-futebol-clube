@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcryptjs';
 // import * as jwt from 'jsonwebtoken';
-import HttpException from '../exceptions/HttpException';
+// import HttpException from '../exceptions/HttpException';
 import User from '../database/models/User.model';
-import { Login } from './interfaces/user.interfaces';
+import { Login, validateResponse } from './interfaces/user.interfaces';
 import { createToken, verifyToken } from '../auth/jwtFunctions';
 
 export default class UserService {
@@ -16,6 +16,7 @@ export default class UserService {
     if (!findUser) {
       return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
     }
+
     const checkPassword = bcrypt.compareSync(password, findUser.dataValues.password);
     if (!checkPassword) {
       return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
@@ -25,12 +26,17 @@ export default class UserService {
     return { type: null, message: token };
   }
 
-  static async validate(token: string): Promise<string> {
+  static async validate(token: string): Promise<validateResponse> {
     const isValid = verifyToken(token);
+
     if (typeof isValid === 'string') {
-      throw new HttpException(400, 'Invalid Token');
+      return { type: 'NOT_FOUND', message: 'Invalid Token' };
     }
-    const findUser = await User.findAll({ where: { email: isValid.data.email } });
-    return findUser[0].dataValues.role;
+    const findUser = await User.findOne({ where: { email: isValid.data.email } });
+
+    if (!findUser) {
+      return { type: 'NOT_FOUND', message: 'user not found' };
+    }
+    return { type: null, message: findUser.dataValues.role };
   }
 }
