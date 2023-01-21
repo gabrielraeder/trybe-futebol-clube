@@ -47,8 +47,7 @@ export default class LeaderboardService {
       efficiency: ((team.reduce(totalHomeSum, 0) / (team.length * 3)) * 100).toFixed(2),
     }));
 
-    const orderedInfo = newInfo.sort((a, b) => b.totalPoints - a.totalPoints);
-    return orderedInfo;
+    return newInfo;
   }
 
   static async getMatchesByAwayTeam(id:number) {
@@ -84,13 +83,32 @@ export default class LeaderboardService {
       efficiency: ((team.reduce(totalAwaySum, 0) / (team.length * 3)) * 100).toFixed(2),
     }));
 
-    const orderedInfo = newInfo.sort((a, b) => b.totalPoints - a.totalPoints);
+    return newInfo;
+  }
+
+  static async sumAll() {
+    const home = await LeaderboardService.getAllHome();
+    const away = await LeaderboardService.getAllAway();
+    const totals = home.map((team, index) => ({
+      name: team.name,
+      totalPoints: team.totalPoints + away[index].totalPoints,
+      totalGames: team.totalGames + away[index].totalGames,
+      totalVictories: team.totalVictories + away[index].totalVictories,
+      totalDraws: team.totalDraws + away[index].totalDraws,
+      totalLosses: team.totalLosses + away[index].totalLosses,
+      goalsFavor: team.goalsFavor + away[index].goalsFavor,
+      goalsOwn: team.goalsOwn + away[index].goalsOwn,
+    }));
+    const orderedInfo = totals.sort((a, b) => b.totalPoints - a.totalPoints);
     return orderedInfo;
   }
-}
 
-// totalPoints: team.reduce((acc, curr): number => {
-//   if (curr.homeTeamGoals > curr.awayTeamGoals) return acc + 3;
-//   if (curr.homeTeamGoals === curr.awayTeamGoals) return acc + 1;
-//   return acc;
-// }, 0),
+  static async getAll() {
+    const data = await LeaderboardService.sumAll();
+    return data.map((team) => ({
+      ...team,
+      goalsBalance: team.goalsFavor - team.goalsOwn,
+      efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
+    }));
+  }
+}
