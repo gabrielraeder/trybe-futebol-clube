@@ -1,13 +1,9 @@
 import * as bcrypt from 'bcryptjs';
-// import * as jwt from 'jsonwebtoken';
-// import HttpException from '../exceptions/HttpException';
 import User from '../database/models/User.model';
 import { Login, validateResponse } from './interfaces/user.interfaces';
 import { createToken, verifyToken } from '../auth/jwtFunctions';
 
 export default class UserService {
-  // public model = User;
-
   static async login(data: Login) {
     const { email, password } = data;
 

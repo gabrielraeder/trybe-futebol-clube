@@ -15,7 +15,6 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
-    // this.app.use(errorMiddleware);
   }
 
   private routes(): void {
@@ -23,7 +22,6 @@ class App {
     this.app.use('/teams', TeamRouter);
     this.app.use('/matches', MatchRouter);
     this.app.use('/leaderboard', LeaderRouter);
-    // this.app.get('/', (req, res) => res.status(201).json({ ok: true }));
   }
 
   private config():void {
