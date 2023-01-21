@@ -1,9 +1,9 @@
 import Team from '../database/models/Team.model';
 import Match from '../database/models/Match.model';
-import { IMatch } from './interfaces/match.interfaces';
+import { IMatch, IScore } from './interfaces/match.interfaces';
 
 export default class MatchService {
-  static async getAll() {
+  static async getAll(): Promise<Match[]> {
     const matches = await Match.findAll({
       include: [
         { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
@@ -13,7 +13,7 @@ export default class MatchService {
     return matches;
   }
 
-  static async getByQuery(query: string) {
+  static async getByQuery(query: string): Promise<Match[]> {
     const inProgress = query === 'true';
     const matches = await Match.findAll({ where: { inProgress },
       include: [
@@ -38,5 +38,11 @@ export default class MatchService {
     }
     const result = await Match.create({ ...data, inProgress: true });
     return { type: null, message: result };
+  }
+
+  static async updateScore(id:number, data: IScore) {
+    const [qtdUpdated] = await Match.update({ ...data }, { where: { id } });
+    if (qtdUpdated === 0) return { type: 'NOT_FOUND', message: 'Match does not exist' };
+    return { type: null, message: data };
   }
 }

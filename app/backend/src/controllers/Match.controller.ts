@@ -38,4 +38,11 @@ export default class MatchController {
     if (type) return res.status(404).json({ message });
     return res.status(201).json(message);
   }
+
+  static async updateScore(req: Request, res: Response) {
+    const { id } = req.params;
+    const { type, message } = await MatchService.updateScore(+id, req.body);
+    if (type) return res.status(400).json({ message });
+    return res.status(200).json(message);
+  }
 }
