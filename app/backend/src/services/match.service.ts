@@ -21,4 +21,10 @@ export default class MatchService {
       ] });
     return matches;
   }
+
+  static async endMatch(id: number) {
+    const [qtdUpdated] = await Match.update({ inProgress: false }, { where: { id } });
+    if (qtdUpdated === 0) return { type: 'NOT_FOUND', message: 'Match does not exist' };
+    return { type: null, message: 'Finished' };
+  }
 }

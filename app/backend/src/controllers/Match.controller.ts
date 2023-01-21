@@ -16,4 +16,11 @@ export default class MatchController {
     const matches = await MatchService.getByQuery(inProgress);
     return res.status(200).json(matches);
   }
+
+  static async endMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { type, message } = await MatchService.endMatch(+id);
+    if (type) return res.status(400).json({ message });
+    return res.status(200).json({ message });
+  }
 }
