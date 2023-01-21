@@ -23,4 +23,19 @@ export default class MatchController {
     if (type) return res.status(400).json({ message });
     return res.status(200).json({ message });
   }
+
+  static async create(req: Request, res: Response) {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+    const data = {
+      homeTeamId: +homeTeamId,
+      awayTeamId: +awayTeamId,
+      homeTeamGoals: +homeTeamGoals,
+      awayTeamGoals: +awayTeamGoals,
+    };
+
+    const { type, message } = await MatchService.create(data);
+    if (type === 'TOKEN_INVALID') return res.status(401).json({ message });
+    if (type) return res.status(404).json({ message });
+    return res.status(201).json(message);
+  }
 }
