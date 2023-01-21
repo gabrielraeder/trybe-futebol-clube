@@ -20,7 +20,13 @@ export default class LeaderboardController {
 
   static async getAll(req: Request, res: Response) {
     const result = await LeaderboardService.getAll();
-    const ordered = sortingHome(result);
+    const ordered = sortingHome(result)
+      .sort((a, b) => {
+        if (a.totalGames === b.totalGames && a.totalPoints === b.totalPoints) {
+          return b.goalsBalance - a.goalsBalance;
+        }
+        return 0;
+      });
 
     return res.status(200).json(ordered);
   }

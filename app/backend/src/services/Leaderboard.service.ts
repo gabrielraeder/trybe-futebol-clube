@@ -99,8 +99,7 @@ export default class LeaderboardService {
       goalsFavor: team.goalsFavor + away[index].goalsFavor,
       goalsOwn: team.goalsOwn + away[index].goalsOwn,
     }));
-    const orderedInfo = totals.sort((a, b) => b.totalPoints - a.totalPoints);
-    return orderedInfo;
+    return totals;
   }
 
   static async getAll() {
