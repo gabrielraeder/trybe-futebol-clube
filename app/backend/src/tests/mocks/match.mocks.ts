@@ -56,3 +56,17 @@ export const matchesMock = [
 		}
 	},
 ]
+
+export const matchToCreate = {
+	homeTeamId: 5,
+	homeTeamGoals: 0,
+	awayTeamId: 2,
+	awayTeamGoals: 0,
+}
+
+export const matchWithSameTeam = {
+	homeTeamId: 2,
+	homeTeamGoals: 0,
+	awayTeamId: 2,
+	awayTeamGoals: 0,
+}

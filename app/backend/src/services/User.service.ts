@@ -4,7 +4,7 @@ import { Login, validateResponse } from './interfaces/user.interfaces';
 import { createToken, verifyToken } from '../auth/jwtFunctions';
 
 export default class UserService {
-  static async login(data: Login) {
+  static async login(data: Login): Promise<validateResponse> {
     const { email, password } = data;
 
     const findUser = await User.findOne({ where: { email } });
