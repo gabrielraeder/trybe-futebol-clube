@@ -22,10 +22,6 @@ const loginInfo = {
 
 describe('-> POST /login', () => {
   let chaiHttpResponse: Response;
-  // before(async () => {
-  //   sinon.stub(User, 'findOne').resolves(userSuccessMock as User)
-  // })
-
   afterEach(()=>{
       (User.findOne as sinon.SinonStub).restore();
       sinon.restore()
