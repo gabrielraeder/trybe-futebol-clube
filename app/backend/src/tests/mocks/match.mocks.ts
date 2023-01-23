@@ -64,6 +64,15 @@ export const matchToCreate = {
 	awayTeamGoals: 0,
 }
 
+export const matchCreated = {
+  id: 49,
+  homeTeamId: 5,
+  awayTeamId: 2,
+  homeTeamGoals: 0,
+  awayTeamGoals: 0,
+  inProgress: true
+}
+
 export const matchWithSameTeam = {
 	homeTeamId: 2,
 	homeTeamGoals: 0,

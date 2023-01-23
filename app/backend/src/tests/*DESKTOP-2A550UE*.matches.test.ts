@@ -8,7 +8,7 @@ import { app } from '../app';
 import Match from '../database/models/Match.model';
 
 import { Response } from 'superagent';
-import { matchesMock, matchToCreate, matchWithSameTeam } from './mocks/match.mocks';
+import { matchCreated, matchesMock, matchToCreate, matchWithSameTeam } from './mocks/match.mocks';
 import { jwtPayload } from './mocks/jwt.mock'
 import { mockedToken } from './mocks/user.mocks';
 import { teamsMock } from './mocks/team.mocks';
@@ -35,7 +35,7 @@ describe('-> GET /matches', () => {
     expect(chaiHttpResponse.status).to.equal(200);
     expect(chaiHttpResponse.body).to.deep.equal(matchesMock);
   })
-})
+});
 
 describe('-> GET /matches?inProgress=', () => {
   let chaiHttpResponse: Response;
@@ -67,7 +67,7 @@ describe('-> GET /matches?inProgress=', () => {
     expect(chaiHttpResponse.status).to.equal(200);
     expect(chaiHttpResponse.body).to.deep.equal(filterTrue);
   })
-})
+});
 
 describe('-> PATCH /matches/:id/finish', () => {
   let chaiHttpResponse: Response;
@@ -99,9 +99,9 @@ describe('-> PATCH /matches/:id/finish', () => {
     expect(chaiHttpResponse.status).to.equal(400);
     expect(chaiHttpResponse.body.message).to.equal('Match does not exist');
   })
-})
+});
 
-describe.only('-> POST /matches', () => {
+describe('-> POST /matches', () => {
   let chaiHttpResponse: Response;
 
   afterEach(()=>{
@@ -168,7 +168,63 @@ describe.only('-> POST /matches', () => {
     expect(chaiHttpResponse.status).to.equal(404);
     expect(chaiHttpResponse.body.message).to.equal('There is no team with such id!');
   })
-})
+
+  it('SUCCESS', async () => {
+    sinon.stub(Match, 'findByPk')
+      .onFirstCall().resolves(teamsMock[0] as Team)
+      .onSecondCall().resolves(teamsMock[1] as Team);
+    sinon.stub(jwt, 'verify').resolves(jwtPayload);
+    sinon.stub(Match, 'create').resolves(matchCreated as Match);
+
+    chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches').send(matchToCreate).set('Authorization', mockedToken);
+    
+    expect(chaiHttpResponse.status).to.equal(201);
+    expect(chaiHttpResponse.body).to.deep.equal(matchCreated);
+  })
+});
+
+describe('-> PATCH /matches/:id', () => {
+  let chaiHttpResponse: Response;
+
+  afterEach(()=>{
+    sinon.restore()
+  });
+  
+  it('FAILURE', async () => {
+    sinon.stub(jwt, 'verify').resolves(jwtPayload);
+    sinon.stub(Match, 'update').resolves([0]);
+
+    chaiHttpResponse = await chai
+      .request(app)
+      .patch('/matches/555').send({
+        homeTeamGoals: 3,
+        awayTeamGoals: 1
+      }).set('Authorization', mockedToken);
+
+    expect(chaiHttpResponse.status).to.equal(400);
+    expect(chaiHttpResponse.body.message).to.equal('Match does not exist');
+  });
+
+  it('SUCCESS', async () => {
+    sinon.stub(jwt, 'verify').resolves(jwtPayload);
+    sinon.stub(Match, 'update').resolves([1]);
+
+    chaiHttpResponse = await chai
+      .request(app)
+      .patch('/matches/555').send({
+        homeTeamGoals: 3,
+        awayTeamGoals: 1
+      }).set('Authorization', mockedToken);
+
+    expect(chaiHttpResponse.status).to.equal(200);
+    expect(chaiHttpResponse.body).to.deep.equal({
+      homeTeamGoals: 3,
+      awayTeamGoals: 1
+    });
+  });
+});
 
 // describe('-> ', () => {
 //   let chaiHttpResponse: Response;
