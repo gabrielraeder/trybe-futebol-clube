@@ -1,6 +1,6 @@
 export interface UserForToken {
   id: number,
   username: string,
-  vocation: string,
-  level: number,
+  role: string,
+  email: string,
 }

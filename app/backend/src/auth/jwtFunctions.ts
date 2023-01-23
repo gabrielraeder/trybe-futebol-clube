@@ -19,7 +19,7 @@ const verifyToken = (authorization: string) => {
     const payload = jwt.verify(authorization, secret);
     return payload;
   } catch (error) {
-    return { isError: true, error };
+    return { isError: true };
   }
 };
 

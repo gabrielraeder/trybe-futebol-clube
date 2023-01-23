@@ -13,6 +13,8 @@ import allMatchesMock from './mocks/allMatches.mock';
 import homeLeaderboardMock from './mocks/homeLeaderboard.mock';
 import awayLeaderboardMock from './mocks/awayLeaderboard.mock';
 import leaderboardMock from './mocks/leaderboard.mock';
+import LeaderboardService from '../services/Leaderboard.service';
+import allLeaderboardsMock from './mocks/allLeaderboards.mock';
 
 chai.use(chaiHttp);
 
@@ -25,7 +27,7 @@ describe('-> GET /leaderboards', () => {
       sinon.restore()
     })
   
-  it('', async () => {
+  it('Success', async () => {
     const matchesByHomeTeam = teamsMock
       .map((team) => allMatchesMock.filter((m) => m.homeTeamId === team.id && m.inProgress === false))
     const matchesByAwayTeam = teamsMock
@@ -87,7 +89,7 @@ describe('-> GET /leaderboards/away', () => {
       sinon.restore()
     })
   
-  it('', async () => {
+  it('Success', async () => {
     const matchesByTeam = teamsMock
       .map((team) => allMatchesMock.filter((m) => m.awayTeamId === team.id && m.inProgress === false))
     
@@ -106,24 +108,23 @@ describe('-> GET /leaderboards/away', () => {
   })
 })
 
-// describe('-> ', () => {
-//   let chaiHttpResponse: Response;
+describe('-> Sorting function', () => {
+  let chaiHttpResponse: Response;
 
-//   afterEach(()=>{
-//       sinon.restore()
-//     })
+  afterEach(()=>{
+      sinon.restore()
+    })
   
-// it('', async () => {
-//   sinon.stub(Match, '').resolves();
-//   chaiHttpResponse = await chai
-//     .request(app)
-//     .post('/').send().set('Authorization',);
-// })
+  it('check', async () => {
+    const originalOrder = allLeaderboardsMock.sort((a, b) => +a.efficiency - +b.efficiency)
+    sinon.stub(LeaderboardService, 'getAll').resolves(originalOrder);
 
-// it('', async () => {
-//   sinon.stub(Match, '').resolves();
-//   chaiHttpResponse = await chai
-//     .request(app)
-//     .post('/').send().set('Authorization',);
-// })
-// })
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/leaderboard');
+    
+    expect(chaiHttpResponse.status).to.equal(200);
+    expect(chaiHttpResponse.body).to.deep.equal(allLeaderboardsMock);
+  })
+
+})

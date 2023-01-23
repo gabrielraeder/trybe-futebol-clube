@@ -19,6 +19,7 @@ export default class LeaderboardController {
 
   static async getAll(req: Request, res: Response) {
     const result = await LeaderboardService.getAll();
+
     const ordered = sorting(result);
 
     return res.status(200).json(ordered);
