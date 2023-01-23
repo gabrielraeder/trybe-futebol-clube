@@ -225,25 +225,3 @@ describe('-> PATCH /matches/:id', () => {
     });
   });
 });
-
-// describe('-> ', () => {
-//   let chaiHttpResponse: Response;
-
-//   afterEach(()=>{
-//       sinon.restore()
-//     })
-  
-// it('', async () => {
-//   sinon.stub(Match, '').resolves();
-//   chaiHttpResponse = await chai
-//     .request(app)
-//     .post('/').send().set('Authorization',);
-// })
-
-// it('', async () => {
-//   sinon.stub(Match, '').resolves();
-//   chaiHttpResponse = await chai
-//     .request(app)
-//     .post('/').send().set('Authorization',);
-// })
-// })
