@@ -1,3 +1,4 @@
+import HttpException from '../exceptions/httpException';
 import Team from '../database/models/Team.model';
 import Match from '../database/models/Match.model';
 import { IMatch, IScore } from './interfaces/match.interfaces';
@@ -23,26 +24,27 @@ export default class MatchService {
     return matches;
   }
 
-  static async endMatch(id: number) {
+  static async endMatch(id: number): Promise<string> {
     const [qtdUpdated] = await Match.update({ inProgress: false }, { where: { id } });
-    if (qtdUpdated === 0) return { type: 'NOT_FOUND', message: 'Match does not exist' };
-    return { type: null, message: 'Finished' };
+    if (qtdUpdated === 0) throw new HttpException(400, 'Match does not exist');
+    return 'Finished';
   }
 
-  static async create(data: IMatch) {
+  static async create(data: IMatch): Promise<Match> {
     const { awayTeamId, homeTeamId } = data;
     const homeTeam = await Match.findByPk(homeTeamId);
     const awayTeam = await Match.findByPk(awayTeamId);
     if (!homeTeam || !awayTeam) {
-      return { type: 'NOT_FOUND', message: 'There is no team with such id!' };
+      throw new HttpException(404, 'There is no team with such id!');
     }
     const result = await Match.create({ ...data, inProgress: true });
-    return { type: null, message: result };
+    return result;
   }
 
-  static async updateScore(id:number, data: IScore) {
+  static async updateScore(id:number, data: IScore): Promise<IScore> {
     const [qtdUpdated] = await Match.update({ ...data }, { where: { id } });
-    if (qtdUpdated === 0) return { type: 'NOT_FOUND', message: 'Match does not exist' };
-    return { type: null, message: data };
+    if (qtdUpdated === 0) throw new HttpException(400, 'Match does not exist');
+
+    return data;
   }
 }

@@ -3,6 +3,8 @@ import UserRouter from './routes/User.route';
 import TeamRouter from './routes/Team.route';
 import MatchRouter from './routes/Match.route';
 import LeaderRouter from './routes/Leaderboard.route';
+import errorMiddleware from './middlewares/error.middleware';
+import 'express-async-errors';
 
 class App {
   public app: express.Express;
@@ -22,6 +24,7 @@ class App {
     this.app.use('/teams', TeamRouter);
     this.app.use('/matches', MatchRouter);
     this.app.use('/leaderboard', LeaderRouter);
+    this.app.use(errorMiddleware);
   }
 
   private config():void {

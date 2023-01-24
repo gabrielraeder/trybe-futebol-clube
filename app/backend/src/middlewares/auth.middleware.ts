@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import HttpException from '../exceptions/httpException';
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization');
 
   if (!token) {
-    return res.status(401).json({ message: 'Token must be a valid token' });
+    throw new HttpException(401, 'Token must be a valid token');
   }
 
   try {
@@ -18,6 +19,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
     return next();
   } catch (error) {
-    return res.status(401).json({ message: 'Token must be a valid token' });
+    throw new HttpException(401, 'Token must be a valid token');
   }
 };

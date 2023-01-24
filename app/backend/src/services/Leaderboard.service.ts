@@ -12,9 +12,10 @@ import {
   awayLosses,
   awayGoalsFavor,
   awayGoalsOwn } from '../helpers/helpers';
+import { ILeaderboard, ILeaderIncomplete } from './interfaces/leaderboard.interface';
 
 export default class LeaderboardService {
-  static async getMatchesByHomeTeam(id:number) {
+  static async getMatchesByHomeTeam(id:number): Promise<Match[]> {
     const matches = await Match.findAll({ where: { homeTeamId: id, inProgress: false },
       include: [
         { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
@@ -24,14 +25,14 @@ export default class LeaderboardService {
     return matches;
   }
 
-  static async getHomeInfo() {
+  static async getHomeInfo(): Promise<Match[][]> {
     const teams = await Team.findAll();
     const promises = teams.map((team) => LeaderboardService.getMatchesByHomeTeam(team.id));
     const matches = await Promise.all(promises);
     return matches;
   }
 
-  static async getAllHome() {
+  static async getAllHome(): Promise<ILeaderboard[]> {
     const teams = await Team.findAll();
     const data = await LeaderboardService.getHomeInfo();
     const newInfo = data.map((team, index) => ({
@@ -50,7 +51,7 @@ export default class LeaderboardService {
     return newInfo;
   }
 
-  static async getMatchesByAwayTeam(id:number) {
+  static async getMatchesByAwayTeam(id:number): Promise<Match[]> {
     const matches = await Match.findAll({ where: { awayTeamId: id, inProgress: false },
       include: [
         { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
@@ -60,14 +61,14 @@ export default class LeaderboardService {
     return matches;
   }
 
-  static async getAwayInfo() {
+  static async getAwayInfo(): Promise<Match[][]> {
     const teams = await Team.findAll();
     const promises = teams.map((team) => LeaderboardService.getMatchesByAwayTeam(team.id));
     const matches = await Promise.all(promises);
     return matches;
   }
 
-  static async getAllAway() {
+  static async getAllAway(): Promise<ILeaderboard[]> {
     const teams = await Team.findAll();
     const data = await LeaderboardService.getAwayInfo();
     const newInfo = data.map((team, index) => ({
@@ -86,7 +87,7 @@ export default class LeaderboardService {
     return newInfo;
   }
 
-  static async sumAll() {
+  static async sumAll(): Promise<ILeaderIncomplete[]> {
     const home = await LeaderboardService.getAllHome();
     const away = await LeaderboardService.getAllAway();
     const totals = home.map((team, index) => ({
@@ -102,7 +103,7 @@ export default class LeaderboardService {
     return totals;
   }
 
-  static async getAll() {
+  static async getAll(): Promise<ILeaderboard[]> {
     const data = await LeaderboardService.sumAll();
     return data.map((team) => ({
       ...team,
