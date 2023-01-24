@@ -15,8 +15,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    jwt.verify(token, secret);
-
+    const decoded = jwt.verify(token, secret);
+    req.body.decoded = decoded;
     return next();
   } catch (error) {
     throw new HttpException(401, 'Token must be a valid token');

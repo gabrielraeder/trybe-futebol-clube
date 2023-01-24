@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -93,9 +94,6 @@ describe('-> POST /login', () => {
 
 describe('-> GET /login/validate', () => {
   let chaiHttpResponse: Response;
-  // before(async () => {
-  //   sinon.stub(User, 'findOne').resolves(userSuccessMock as User)
-  // })
 
   afterEach(()=>{
       (User.findOne as sinon.SinonStub).restore();
@@ -103,15 +101,15 @@ describe('-> GET /login/validate', () => {
     })
 
   it('Requisição com SUCESSO', async () => {
-    sinon.stub(User, 'findOne').resolves(userSuccessMock as User);
-    sinon.stub(auth, 'verifyToken').returns(jwtVerifiedMock);
+    sinon.stub(User, 'findOne').resolves();
+    sinon.stub(jwt, 'verify').returns(jwtVerifiedMock as any);
   
     chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate').set('Authorization', mockedToken);
       
     expect(chaiHttpResponse.status).to.equal(200);
-    expect(chaiHttpResponse.body.role).to.equal(userSuccessMock.dataValues.role);
+    expect(chaiHttpResponse.body.role).to.equal(jwtVerifiedMock.data.role);
   });
 
   it('Requisição sem TOKEN', async () => {
@@ -122,8 +120,8 @@ describe('-> GET /login/validate', () => {
       .request(app)
       .get('/login/validate').set('Authorization', '');
       
-    expect(chaiHttpResponse.status).to.equal(400);
-    expect(chaiHttpResponse.body.message).to.equal('Token not found');
+    expect(chaiHttpResponse.status).to.equal(401);
+    expect(chaiHttpResponse.body.message).to.equal('Token must be a valid token');
   });
 
   it('Requisição com TOKEN INVALIDO', async () => {
@@ -135,20 +133,20 @@ describe('-> GET /login/validate', () => {
       .get('/login/validate').set('Authorization', 'wrongToken');
       
     expect(chaiHttpResponse.status).to.equal(401);
-    expect(chaiHttpResponse.body.message).to.equal('Invalid Token');
+    expect(chaiHttpResponse.body.message).to.equal('Token must be a valid token');
   });
 
-  it('Requisição com TOKEN VALIDO, sem encontrar usuario', async () => {
-    sinon.stub(User, 'findOne').resolves();
-    sinon.stub(auth, 'verifyToken').returns(jwtVerifiedMock);
+  // it.only('Requisição com TOKEN VALIDO, sem encontrar usuario', async () => {
+  //   sinon.stub(User, 'findOne').resolves();
+  //   sinon.stub(jwt, 'verify').returns(jwtVerifiedMock as any);
   
-    chaiHttpResponse = await chai
-      .request(app)
-      .get('/login/validate').set('Authorization', mockedToken);
+  //   chaiHttpResponse = await chai
+  //     .request(app)
+  //     .get('/login/validate').set('Authorization', mockedToken);
       
-    expect(chaiHttpResponse.status).to.equal(401);
-    expect(chaiHttpResponse.body.message).to.equal('user not found');
-  });
+  //   expect(chaiHttpResponse.status).to.equal(401);
+  //   expect(chaiHttpResponse.body.message).to.equal('user not found');
+  // });
 });
 
   

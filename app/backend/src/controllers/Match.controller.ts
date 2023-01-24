@@ -11,10 +11,7 @@ export default class MatchController {
 
   static async getByQuery(req: Request, res: Response): Promise<Response> {
     const { inProgress } = req.query;
-    if (typeof inProgress !== 'string') {
-      throw new HttpException(422, 'Bad Request');
-    }
-    const matches = await MatchService.getByQuery(inProgress);
+    const matches = await MatchService.getByQuery(inProgress as string);
     return res.status(200).json(matches);
   }
 

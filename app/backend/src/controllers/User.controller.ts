@@ -11,13 +11,8 @@ export default class UserController {
     }
   }
 
-  static async validate(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    try {
-      const token = req.header('Authorization');
-      const role = await UserService.validate(token as string);
-      return res.status(200).json({ role });
-    } catch (error) {
-      next(error);
-    }
+  static async validate(req: Request, res: Response): Promise<Response> {
+    const { decoded: { data: { role } } } = req.body;
+    return res.status(200).json({ role });
   }
 }

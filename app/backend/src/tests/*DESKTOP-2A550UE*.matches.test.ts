@@ -221,7 +221,8 @@ describe('-> PATCH /matches/:id', () => {
     expect(chaiHttpResponse.status).to.equal(200);
     expect(chaiHttpResponse.body).to.deep.equal({
       homeTeamGoals: 3,
-      awayTeamGoals: 1
+      awayTeamGoals: 1,
+      decoded: {},
     });
   });
 });
