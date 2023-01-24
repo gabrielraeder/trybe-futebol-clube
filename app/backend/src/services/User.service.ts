@@ -2,7 +2,7 @@ import * as bcrypt from 'bcryptjs';
 import HttpException from '../exceptions/httpException';
 import User from '../database/models/User.model';
 import { Login } from './interfaces/user.interfaces';
-import { createToken, verifyToken } from '../auth/jwtFunctions';
+import { createToken } from '../auth/jwtFunctions';
 
 export default class UserService {
   static async login(data: Login): Promise<string> {
@@ -25,12 +25,12 @@ export default class UserService {
     return token;
   }
 
-  static async validate(token: string): Promise<string> {
-    const isValid = verifyToken(token);
-    if (typeof isValid === 'string') throw new HttpException(401, 'Invalid Token');
+  // static async validate(token: string): Promise<string> {
+  //   const isValid = verifyToken(token);
+  //   if (typeof isValid === 'string') throw new HttpException(401, 'Invalid Token');
 
-    const findUser = await User.findOne({ where: { email: isValid.data.email } });
-    if (!findUser) throw new HttpException(401, 'User not found');
-    return findUser.dataValues.role;
-  }
+  //   const findUser = await User.findOne({ where: { email: isValid.data.email } });
+  //   if (!findUser) throw new HttpException(401, 'User not found');
+  //   return findUser.dataValues.role;
+  // }
 }
