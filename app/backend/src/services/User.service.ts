@@ -12,13 +12,11 @@ export default class UserService {
 
     if (!findUser) {
       throw new HttpException(401, 'Incorrect email or password');
-      // return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
     }
 
     const checkPassword = bcrypt.compareSync(password, findUser.dataValues.password);
     if (!checkPassword) {
       throw new HttpException(401, 'Incorrect email or password');
-      // return { type: 'NOT_FOUND', message: 'Incorrect email or password' };
     }
     const { password: _pass, ...userWithoutPassword } = findUser.dataValues;
     const token = createToken(userWithoutPassword);
