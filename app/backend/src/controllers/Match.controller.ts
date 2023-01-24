@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import HttpException from '../exceptions/httpException';
 import MatchService from '../services/match.service';
 
 export default class MatchController {
