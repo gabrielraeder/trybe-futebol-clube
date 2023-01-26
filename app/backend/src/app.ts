@@ -1,10 +1,13 @@
 import * as express from 'express';
-import UserRouter from './routes/User.route';
-import TeamRouter from './routes/Team.route';
-import MatchRouter from './routes/Match.route';
-import LeaderRouter from './routes/Leaderboard.route';
-import errorMiddleware from './middlewares/error.middleware';
 import 'express-async-errors';
+// import UserRouter from './routes/User.route';
+// import TeamRouter from './routes/Team.route';
+// import MatchRouter from './routes/Match.route';
+// import LeaderRouter from './routes/Leaderboard.route';
+import errorMiddleware from './middlewares/error.middleware';
+import BarrelRouter from './routes';
+
+const barrelRouter = new BarrelRouter();
 
 class App {
   public app: express.Express;
@@ -14,16 +17,16 @@ class App {
 
     this.config();
     this.routes();
-
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
   }
 
   private routes(): void {
-    this.app.use('/login', UserRouter);
-    this.app.use('/teams', TeamRouter);
-    this.app.use('/matches', MatchRouter);
-    this.app.use('/leaderboard', LeaderRouter);
+    this.app.use(barrelRouter.router);
+    // this.app.use('/login', userRouter.router);
+    // this.app.use('/teams', TeamRouter);
+    // this.app.use('/matches', MatchRouter);
+    // this.app.use('/leaderboard', LeaderRouter);
     this.app.use(errorMiddleware);
   }
 
