@@ -1,3 +1,6 @@
+import Match from '../../database/models/Match.model';
+import Team from '../../database/models/Team.model';
+
 export interface ILeaderNumbers {
   totalPoints: number;
   totalGames: number;
@@ -16,4 +19,9 @@ export interface ILeaderIncomplete extends ILeaderNumbers {
 export interface ILeaderboard extends ILeaderIncomplete {
   goalsBalance: number;
   efficiency: string;
+}
+
+export interface IDbReturn {
+  teams: Team[],
+  matches: Match[],
 }

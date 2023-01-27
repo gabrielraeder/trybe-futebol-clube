@@ -2,7 +2,7 @@ import sorting from '../helpers/sorting';
 import Match from '../database/models/Match.model';
 import Team from '../database/models/Team.model';
 import SumHelper from '../helpers/helpers';
-import { ILeaderboard, ILeaderNumbers } from './interfaces/leaderboard.interface';
+import { IDbReturn, ILeaderboard, ILeaderNumbers } from './interfaces/leaderboard.interface';
 
 export default class LeaderboardService {
   static mapInfo(
@@ -26,9 +26,7 @@ export default class LeaderboardService {
     return newInfo;
   }
 
-  static async getInfo(url: string): Promise<ILeaderboard[]> {
-    const teams = await Team.findAll();
-    const matches = await Match.findAll({ where: { inProgress: false } });
+  static getInfo(url: string, teams: Team[], matches: Match[]): ILeaderboard[] {
     const homeOrAway = url.includes('home') ? 'homeTeamId' : 'awayTeamId';
     const matchesByTeam = teams.map((team) => matches.filter((m) => m[homeOrAway] === team.id));
     return LeaderboardService.mapInfo(matchesByTeam, teams, url);
@@ -45,9 +43,16 @@ export default class LeaderboardService {
     return totals;
   }
 
+  static async dbSearchs(): Promise<IDbReturn> {
+    const teams = await Team.findAll();
+    const matches = await Match.findAll({ where: { inProgress: false } });
+    return { teams, matches };
+  }
+
   static async getAll(url: string): Promise<ILeaderboard[]> {
-    const home = await LeaderboardService.getInfo('home');
-    const away = await LeaderboardService.getInfo('away');
+    const { teams, matches } = await LeaderboardService.dbSearchs();
+    const home = LeaderboardService.getInfo('home', teams, matches);
+    const away = LeaderboardService.getInfo('away', teams, matches);
     if (url.includes('home')) {
       return sorting(home);
     }
