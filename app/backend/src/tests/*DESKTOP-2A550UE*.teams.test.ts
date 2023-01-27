@@ -21,7 +21,7 @@ describe('-> GET /teams', () => {
       sinon.restore()
     })
   
-  it('Requisição com SUCESSO', async () => {
+  it('Success', async () => {
     sinon.stub(Team, 'findAll').resolves(teamsMock as Team[])
 
     chaiHttpResponse = await chai
@@ -40,7 +40,7 @@ describe('-> GET /teams/:id', () => {
       sinon.restore()
     })
   
-  it('Requisição com SUCESSO', async () => {
+  it('Success', async () => {
     sinon.stub(Team, 'findByPk').resolves(teamsMock[0] as Team)
 
     chaiHttpResponse = await chai
@@ -51,7 +51,7 @@ describe('-> GET /teams/:id', () => {
     expect(chaiHttpResponse.body).to.deep.equal(teamsMock[0]);
   })
   
-  it('Requisição FALHANDO', async () => {
+  it('Failure', async () => {
     sinon.stub(Team, 'findByPk').resolves();
 
     chaiHttpResponse = await chai

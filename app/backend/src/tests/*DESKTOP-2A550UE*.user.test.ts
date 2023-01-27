@@ -28,7 +28,7 @@ describe('-> POST /login', () => {
       sinon.restore()
     })
 
-  it('Requisição sem PASSWORD', async () => {
+  it('Without password', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User)
   
     chaiHttpResponse = await chai
@@ -40,7 +40,7 @@ describe('-> POST /login', () => {
     expect(chaiHttpResponse.body.message).to.equal('All fields must be filled');
   });
 
-  it('Requisição sem EMAIL', async () => {
+  it('Without email', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User)
   
     chaiHttpResponse = await chai
@@ -52,7 +52,7 @@ describe('-> POST /login', () => {
     expect(chaiHttpResponse.body.message).to.equal('All fields must be filled');
   });
 
-  it('Requisição com PASSWORD incorreto', async () => {
+  it('With invalid password', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User);
     sinon.stub(bcrypt, 'compareSync').returns(false);
   
@@ -65,7 +65,7 @@ describe('-> POST /login', () => {
     expect(chaiHttpResponse.body.message).to.equal('Incorrect email or password');
   });
 
-  it('Requisição com EMAIL incorreto', async () => {
+  it('With invalid email', async () => {
     sinon.stub(User, 'findOne').resolves();
   
     chaiHttpResponse = await chai
@@ -77,7 +77,7 @@ describe('-> POST /login', () => {
     expect(chaiHttpResponse.body.message).to.equal('Incorrect email or password');
   });
 
-  it('Requisição com SUCESSO', async () => {
+  it('Success', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User);
     sinon.stub(bcrypt, 'compareSync').returns(true);
     sinon.stub(auth, 'createToken').returns(mockedToken)
@@ -100,7 +100,7 @@ describe('-> GET /login/validate', () => {
       sinon.restore()
     })
 
-  it('Requisição com SUCESSO', async () => {
+  it('Success', async () => {
     sinon.stub(User, 'findOne').resolves();
     sinon.stub(jwt, 'verify').returns(jwtVerifiedMock as any);
   
@@ -112,9 +112,8 @@ describe('-> GET /login/validate', () => {
     expect(chaiHttpResponse.body.role).to.equal(jwtVerifiedMock.data.role);
   });
 
-  it('Requisição sem TOKEN', async () => {
+  it('Without token', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User);
-    // sinon.stub(auth, 'verifyToken').returns(jwtVerifiedMock);
   
     chaiHttpResponse = await chai
       .request(app)
@@ -124,7 +123,7 @@ describe('-> GET /login/validate', () => {
     expect(chaiHttpResponse.body.message).to.equal('Token must be a valid token');
   });
 
-  it('Requisição com TOKEN INVALIDO', async () => {
+  it('Invalid token', async () => {
     sinon.stub(User, 'findOne').resolves(userSuccessMock as User);
     sinon.stub(auth, 'verifyToken').returns('jwtVerifiedMock');
   
@@ -135,45 +134,4 @@ describe('-> GET /login/validate', () => {
     expect(chaiHttpResponse.status).to.equal(401);
     expect(chaiHttpResponse.body.message).to.equal('Token must be a valid token');
   });
-
-  // it.only('Requisição com TOKEN VALIDO, sem encontrar usuario', async () => {
-  //   sinon.stub(User, 'findOne').resolves();
-  //   sinon.stub(jwt, 'verify').returns(jwtVerifiedMock as any);
-  
-  //   chaiHttpResponse = await chai
-  //     .request(app)
-  //     .get('/login/validate').set('Authorization', mockedToken);
-      
-  //   expect(chaiHttpResponse.status).to.equal(401);
-  //   expect(chaiHttpResponse.body.message).to.equal('user not found');
-  // });
 });
-
-  
-
-
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
-
-  // let chaiHttpResponse: Response;
-
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
-
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
-
-  // it('...', async () => {
-  //   chaiHttpResponse = await chai
-  //      .request(app)
-  //      ...
-
-  //   expect(...)
-  // });

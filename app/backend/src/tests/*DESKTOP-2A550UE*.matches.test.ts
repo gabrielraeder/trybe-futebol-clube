@@ -25,7 +25,7 @@ describe('-> GET /matches', () => {
       sinon.restore()
     })
   
-  it('Requisição com SUCESSO', async () => {
+  it('Success', async () => {
     sinon.stub(Match, 'findAll').resolves(matchesMock as unknown as Match[]);
 
     chaiHttpResponse = await chai
@@ -44,7 +44,7 @@ describe('-> GET /matches?inProgress=', () => {
       sinon.restore()
     })
   
-  it('FALSE', async () => {
+  it('?inProgress=false', async () => {
     const filterFalse = matchesMock.filter((m) => m.inProgress === false);
     sinon.stub(Match, 'findAll').resolves(filterFalse as unknown as Match[]);
 
@@ -56,7 +56,7 @@ describe('-> GET /matches?inProgress=', () => {
     expect(chaiHttpResponse.body).to.deep.equal(filterFalse);
   })
 
-  it('TRUE', async () => {
+  it('?inProgress=true', async () => {
     const filterTrue = matchesMock.filter((m) => m.inProgress === true);
     sinon.stub(Match, 'findAll').resolves(filterTrue as unknown as Match[]);
 
@@ -76,7 +76,7 @@ describe('-> PATCH /matches/:id/finish', () => {
       sinon.restore()
     })
   
-  it('SUCCESS', async () => {
+  it('Success', async () => {
     sinon.stub(Match, 'update').resolves([1]);
 
     chaiHttpResponse = await chai
@@ -89,7 +89,7 @@ describe('-> PATCH /matches/:id/finish', () => {
     
   })
 
-  it('FAILURE', async () => {
+  it('Failure', async () => {
     sinon.stub(Match, 'update').resolves([0]);
 
     chaiHttpResponse = await chai
@@ -130,7 +130,7 @@ describe('-> POST /matches', () => {
     expect(chaiHttpResponse.body.message).to.equal('Token must be a valid token');
   })
   
-  it('FAILURE - It is not possible to create a match with two equal teams', async () => {
+  it('It is not possible to create a match with two equal teams', async () => {
     sinon.stub(jwt, 'verify').resolves(jwtPayload);
     
     chaiHttpResponse = await chai
@@ -169,7 +169,7 @@ describe('-> POST /matches', () => {
     expect(chaiHttpResponse.body.message).to.equal('There is no team with such id!');
   })
 
-  it('SUCCESS', async () => {
+  it('Success', async () => {
     sinon.stub(Match, 'findByPk')
       .onFirstCall().resolves(teamsMock[0] as Team)
       .onSecondCall().resolves(teamsMock[1] as Team);
@@ -192,7 +192,7 @@ describe('-> PATCH /matches/:id', () => {
     sinon.restore()
   });
   
-  it('FAILURE', async () => {
+  it('Failure', async () => {
     sinon.stub(jwt, 'verify').resolves(jwtPayload);
     sinon.stub(Match, 'update').resolves([0]);
 
@@ -207,7 +207,7 @@ describe('-> PATCH /matches/:id', () => {
     expect(chaiHttpResponse.body.message).to.equal('Match does not exist');
   });
 
-  it('SUCCESS', async () => {
+  it('Success', async () => {
     sinon.stub(jwt, 'verify').resolves(jwtPayload);
     sinon.stub(Match, 'update').resolves([1]);
 

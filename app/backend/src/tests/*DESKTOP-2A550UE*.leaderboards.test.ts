@@ -28,19 +28,8 @@ describe('-> GET /leaderboards', () => {
     })
   
   it('Success', async () => {
-    const matchesByHomeTeam = teamsMock
-      .map((team) => allMatchesMock.filter((m) => m.homeTeamId === team.id && m.inProgress === false))
-    const matchesByAwayTeam = teamsMock
-      .map((team) => allMatchesMock.filter((m) => m.awayTeamId === team.id && m.inProgress === false))
-
     sinon.stub(Team, 'findAll').resolves(teamsMock as Team[]);
-    sinon.stub(Match, 'findAll')
-      .onCall(0).resolves(matchesByHomeTeam[0] as unknown as Match[])
-      .onCall(1).resolves(matchesByHomeTeam[1] as unknown as Match[])
-      .onCall(2).resolves(matchesByHomeTeam[2] as unknown as Match[])
-      .onCall(3).resolves(matchesByAwayTeam[0] as unknown as Match[])
-      .onCall(4).resolves(matchesByAwayTeam[1] as unknown as Match[])
-      .onCall(5).resolves(matchesByAwayTeam[2] as unknown as Match[]);
+    sinon.stub(Match, 'findAll').resolves(allMatchesMock as unknown as Match[]);
 
     chaiHttpResponse = await chai
       .request(app)
@@ -58,20 +47,9 @@ describe('-> GET /leaderboards/home', () => {
       sinon.restore()
     })
   
-  it('Success', async () => {
-    const matchesByTeam = teamsMock
-      .map((team) => allMatchesMock.filter((m) => m.homeTeamId === team.id && m.inProgress === false))
-    
+  it('Success', async () => {    
     sinon.stub(Team, 'findAll').resolves(teamsMock as Team[]);
-    sinon.stub(Match, 'findAll')
-      .onFirstCall().resolves(matchesByTeam[0] as unknown as Match[])
-      .onSecondCall().resolves(matchesByTeam[1] as unknown as Match[])
-      .onThirdCall().resolves(matchesByTeam[2] as unknown as Match[]);
-    
-    // teamsMock.forEach((t, index) => {
-    //   sinon.stub(Match, 'findAll').onCall(index)
-    //     .resolves(allMatchesMock.filter((m) => m.homeTeamId === (index + 1)) as unknown as Match[]);
-    // })
+    sinon.stub(Match, 'findAll').resolves(allMatchesMock as unknown as Match[]);
 
     chaiHttpResponse = await chai
       .request(app)
@@ -89,15 +67,9 @@ describe('-> GET /leaderboards/away', () => {
       sinon.restore()
     })
   
-  it('Success', async () => {
-    const matchesByTeam = teamsMock
-      .map((team) => allMatchesMock.filter((m) => m.awayTeamId === team.id && m.inProgress === false))
-    
+  it('Success', async () => {    
     sinon.stub(Team, 'findAll').resolves(teamsMock as Team[]);
-    sinon.stub(Match, 'findAll')
-      .onFirstCall().resolves(matchesByTeam[0] as unknown as Match[])
-      .onSecondCall().resolves(matchesByTeam[1] as unknown as Match[])
-      .onThirdCall().resolves(matchesByTeam[2] as unknown as Match[]);
+    sinon.stub(Match, 'findAll').resolves(allMatchesMock as unknown as Match[]);
 
     chaiHttpResponse = await chai
       .request(app)
