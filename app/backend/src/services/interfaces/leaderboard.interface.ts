@@ -1,5 +1,4 @@
-export interface ILeaderIncomplete {
-  name: string;
+export interface ILeaderNumbers {
   totalPoints: number;
   totalGames: number;
   totalVictories: number;
@@ -7,6 +6,11 @@ export interface ILeaderIncomplete {
   totalLosses: number;
   goalsFavor: number;
   goalsOwn: number;
+}
+
+export interface ILeaderIncomplete extends ILeaderNumbers {
+  name: string;
+
 }
 
 export interface ILeaderboard extends ILeaderIncomplete {

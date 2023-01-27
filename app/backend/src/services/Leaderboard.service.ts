@@ -2,7 +2,7 @@ import sorting from '../helpers/sorting';
 import Match from '../database/models/Match.model';
 import Team from '../database/models/Team.model';
 import SumHelper from '../helpers/helpers';
-import { ILeaderboard, ILeaderIncomplete } from './interfaces/leaderboard.interface';
+import { ILeaderboard, ILeaderNumbers } from './interfaces/leaderboard.interface';
 
 export default class LeaderboardService {
   static mapInfo(
@@ -34,17 +34,14 @@ export default class LeaderboardService {
     return LeaderboardService.mapInfo(matchesByTeam, teams, url);
   }
 
-  static async sumAll(home: ILeaderboard[], away: ILeaderboard[]): Promise<ILeaderIncomplete[]> {
-    const totals = home.map((team, index) => ({
-      name: team.name,
-      totalPoints: team.totalPoints + away[index].totalPoints,
-      totalGames: team.totalGames + away[index].totalGames,
-      totalVictories: team.totalVictories + away[index].totalVictories,
-      totalDraws: team.totalDraws + away[index].totalDraws,
-      totalLosses: team.totalLosses + away[index].totalLosses,
-      goalsFavor: team.goalsFavor + away[index].goalsFavor,
-      goalsOwn: team.goalsOwn + away[index].goalsOwn,
-    }));
+  static sumAll(home:ILeaderNumbers[], away:ILeaderNumbers[]): ILeaderNumbers[] {
+    const keys = (Object.keys(home[0]) as (keyof ILeaderNumbers)[]);
+    const totals = home
+      .map((team, index) => keys
+        .reduce((acc, curr) => ({
+          ...acc,
+          [curr]: team[curr] + away[index][curr],
+        }), {} as ILeaderNumbers));
     return totals;
   }
 
@@ -57,11 +54,13 @@ export default class LeaderboardService {
     if (url.includes('away')) {
       return sorting(away);
     }
-    const data = await LeaderboardService.sumAll(home, away);
-    return sorting(data.map((team) => ({
+    const totals = LeaderboardService.sumAll(home, away);
+    const data = totals.map((team, index) => ({
       ...team,
+      name: home[index].name,
       goalsBalance: team.goalsFavor - team.goalsOwn,
       efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
-    })));
+    }));
+    return sorting(data);
   }
 }
