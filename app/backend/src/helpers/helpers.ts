@@ -1,21 +1,24 @@
 import Match from '../database/models/Match.model';
 import { IProperties, IHomeOrAway } from './properties.types';
+import { ISumHelper } from './SumHelper.interface';
 
-export default class SumHelper {
-  private homeOrAway: IHomeOrAway;
-  private otherSide: IHomeOrAway;
+export default class SumHelper implements ISumHelper {
+  private _homeOrAway: IHomeOrAway;
+  private _otherSide: IHomeOrAway;
   private _properties: IProperties[];
 
   constructor(url: string) {
-    this.homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    this.otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+    this._homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
+    this._otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
     this._properties = ['totalPoints', 'totalGames', 'totalVictories', 'totalDraws',
       'totalLosses', 'goalsFavor', 'goalsOwn', 'goalsBalance', 'efficiency'];
   }
 
+  get homeOrAway() { return this._homeOrAway; }
+  get otherSide() { return this._otherSide; }
   get properties() { return this._properties; }
 
-  private totalPoints(teamMatches: Match[]) {
+  private totalPoints(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => {
       if (curr[this.homeOrAway] > curr[this.otherSide]) return acc + 3;
       if (curr[this.homeOrAway] === curr[this.otherSide]) return acc + 1;
@@ -62,7 +65,7 @@ export default class SumHelper {
 
   private totalGames = (teamMatches: Match[]) => teamMatches.length;
 
-  calculate(teamMatches: Match[], propertie: IProperties) {
+  calculate(teamMatches: Match[], propertie: IProperties): number | string {
     return this[propertie](teamMatches);
   }
 }
