@@ -26,44 +26,44 @@ export default class SumHelper implements ISumHelper {
     }, 0);
   }
 
-  private totalVictories(teamMatches: Match[]) {
+  private totalVictories(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => {
       if (curr[this.homeOrAway] > curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  private totalLosses(teamMatches: Match[]) {
+  private totalLosses(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => {
       if (curr[this.homeOrAway] < curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  private totalDraws(teamMatches: Match[]) {
+  private totalDraws(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => {
       if (curr[this.homeOrAway] === curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  private goalsFavor(teamMatches: Match[]) {
+  private goalsFavor(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[this.homeOrAway], 0);
   }
 
-  private goalsOwn(teamMatches: Match[]) {
+  private goalsOwn(teamMatches: Match[]): number {
     return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[this.otherSide], 0);
   }
 
-  private goalsBalance(teamMatches:Match[]) {
+  private goalsBalance(teamMatches:Match[]): number {
     return this.goalsFavor(teamMatches) - this.goalsOwn(teamMatches);
   }
 
-  private efficiency(teamMatches:Match[]) {
+  private efficiency(teamMatches:Match[]): string {
     return ((this.totalPoints(teamMatches) / (teamMatches.length * 3)) * 100).toFixed(2);
   }
 
-  private totalGames = (teamMatches: Match[]) => teamMatches.length;
+  private totalGames = (teamMatches: Match[]): number => teamMatches.length;
 
   calculate(teamMatches: Match[], propertie: IProperties): number | string {
     return this[propertie](teamMatches);
