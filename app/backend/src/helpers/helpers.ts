@@ -1,50 +1,68 @@
 import Match from '../database/models/Match.model';
+import { IProperties, IHomeOrAway } from './properties.types';
 
 export default class SumHelper {
-  static pointsSum(url: string, teamMatches: Match[]) {
-    const homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    const otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+  private homeOrAway: IHomeOrAway;
+  private otherSide: IHomeOrAway;
+  private _properties: IProperties[];
+
+  constructor(url: string) {
+    this.homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
+    this.otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+    this._properties = ['totalPoints', 'totalGames', 'totalVictories', 'totalDraws',
+      'totalLosses', 'goalsFavor', 'goalsOwn', 'goalsBalance', 'efficiency'];
+  }
+
+  get properties() { return this._properties; }
+
+  private totalPoints(teamMatches: Match[]) {
     return teamMatches.reduce((acc: number, curr: Match): number => {
-      if (curr[homeOrAway] > curr[otherSide]) return acc + 3;
-      if (curr[homeOrAway] === curr[otherSide]) return acc + 1;
+      if (curr[this.homeOrAway] > curr[this.otherSide]) return acc + 3;
+      if (curr[this.homeOrAway] === curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  static victories(url: string, teamMatches: Match[]) {
-    const homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    const otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+  private totalVictories(teamMatches: Match[]) {
     return teamMatches.reduce((acc: number, curr: Match): number => {
-      if (curr[homeOrAway] > curr[otherSide]) return acc + 1;
+      if (curr[this.homeOrAway] > curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  static losses(url: string, teamMatches: Match[]) {
-    const homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    const otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+  private totalLosses(teamMatches: Match[]) {
     return teamMatches.reduce((acc: number, curr: Match): number => {
-      if (curr[homeOrAway] < curr[otherSide]) return acc + 1;
+      if (curr[this.homeOrAway] < curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  static draws(url: string, teamMatches: Match[]) {
-    const homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    const otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
+  private totalDraws(teamMatches: Match[]) {
     return teamMatches.reduce((acc: number, curr: Match): number => {
-      if (curr[homeOrAway] === curr[otherSide]) return acc + 1;
+      if (curr[this.homeOrAway] === curr[this.otherSide]) return acc + 1;
       return acc;
     }, 0);
   }
 
-  static goalsFavor(url: string, teamMatches: Match[]) {
-    const homeOrAway = url.includes('home') ? 'homeTeamGoals' : 'awayTeamGoals';
-    return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[homeOrAway], 0);
+  private goalsFavor(teamMatches: Match[]) {
+    return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[this.homeOrAway], 0);
   }
 
-  static goalsOwn(url: string, teamMatches: Match[]) {
-    const otherSide = url.includes('home') ? 'awayTeamGoals' : 'homeTeamGoals';
-    return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[otherSide], 0);
+  private goalsOwn(teamMatches: Match[]) {
+    return teamMatches.reduce((acc: number, curr: Match): number => acc + curr[this.otherSide], 0);
+  }
+
+  private goalsBalance(teamMatches:Match[]) {
+    return this.goalsFavor(teamMatches) - this.goalsOwn(teamMatches);
+  }
+
+  private efficiency(teamMatches:Match[]) {
+    return ((this.totalPoints(teamMatches) / (teamMatches.length * 3)) * 100).toFixed(2);
+  }
+
+  private totalGames = (teamMatches: Match[]) => teamMatches.length;
+
+  calculate(teamMatches: Match[], propertie: IProperties) {
+    return this[propertie](teamMatches);
   }
 }

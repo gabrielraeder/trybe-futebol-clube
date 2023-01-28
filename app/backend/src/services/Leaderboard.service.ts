@@ -10,20 +10,13 @@ export default class LeaderboardService {
     teams: Team[],
     url:string,
   ): ILeaderboard[] {
-    const newInfo = matchesByTeam.map((team, index) => ({
-      name: teams[index].teamName,
-      totalPoints: SumHelper.pointsSum(url, team),
-      totalGames: team.length,
-      totalVictories: SumHelper.victories(url, team),
-      totalDraws: SumHelper.draws(url, team),
-      totalLosses: SumHelper.losses(url, team),
-      goalsFavor: SumHelper.goalsFavor(url, team),
-      goalsOwn: SumHelper.goalsOwn(url, team),
-      goalsBalance: SumHelper.goalsFavor(url, team) - SumHelper.goalsOwn(url, team),
-      efficiency: ((SumHelper.pointsSum(url, team) / (team.length * 3)) * 100).toFixed(2),
-    }));
-
-    return newInfo;
+    const sumHelper = new SumHelper(url);
+    return matchesByTeam.map((team, index) => sumHelper.properties
+      .reduce((acc, curr) => ({
+        ...acc,
+        name: teams[index].teamName,
+        [curr]: sumHelper.calculate(team, curr),
+      }), {} as ILeaderboard));
   }
 
   static getInfo(url: string, teams: Team[], matches: Match[]): ILeaderboard[] {
