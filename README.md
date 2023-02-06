@@ -5,22 +5,14 @@ Este projeto visa simular o funcionamento fullstack de uma tabela de um campeona
 
 ## Table of Contents
 
-- [Security](#security)
-- [Background](#background)
+- [Built With](#built)
 - [Install](#install)
-- [Usage](#usage)
-- [API](#api)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Security
+## Built With
+1 - 
+```
 
-### Any optional sections
-
-## Background
-
-### Any optional sections
-
+```
 ## Install
 
 This module depends upon a knowledge of [Markdown]().
@@ -41,5 +33,4 @@ npm run compose:up
 ```
 
 A aplicação estará rodando em [http://localhost:3000](http://localhost:3000).
-### Any optional sections
 
