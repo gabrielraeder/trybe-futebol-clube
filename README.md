@@ -5,15 +5,15 @@ Este projeto visa simular o funcionamento fullstack de uma tabela de um campeona
 
 ## Built With
 
+- [TypeScript](https://www.typescriptlang.org/)
+- [Node.js](https://nodejs.org/en/)
 - [Docker](https://www.docker.com/)
 - [Docker-Compose](https://docs.docker.com/compose/)
 - [MySQL](https://www.mysql.com/)
-- [Node.js](https://nodejs.org/en/)
+- [Sequelize](https://sequelize.org/)
 - [Express](https://expressjs.com/)
 - [JsonWebToken](https://jwt.io/)
 - [BCrypt](https://www.npmjs.com/package/bcrypt)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Sequelize](https://sequelize.org/)
 - [React.js](https://pt-br.reactjs.org/)
 
 ## Tests With
