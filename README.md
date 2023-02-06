@@ -5,7 +5,7 @@ Este projeto visa simular o funcionamento fullstack de uma tabela de um campeona
 
 ## Table of Contents
 
-- [Built With](#built)
+- [Built With](#built with)
 - [Install](#install)
 
 ## Built With
