@@ -3,16 +3,25 @@
 Projeto desenvolvido no curso de desenvolvimento WEB da [Trybe](https://www.betrybe.com/) por  [Gabriel Gonçalves](https://www.linkedin.com/in/gabrielraedergoncalves/).
 Este projeto visa simular o funcionamento fullstack de uma tabela de um campeonato de futebol, sendo possível visualizar tabelas, também com filtros(casa e visitante), acessar como administrador para adicionar nova partida, editar placares de partidas em andamento e informar partidas como finalizadas.
 
-## Table of Contents
-
-- [Built With](#built with)
-- [Install](#install)
-
 ## Built With
-1 - 
-```
 
-```
+- [Docker](https://www.docker.com/)
+- [Docker-Compose](https://docs.docker.com/compose/)
+- [MySQL](https://www.mysql.com/)
+- [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+- [JsonWebToken](https://jwt.io/)
+- [BCrypt](https://www.npmjs.com/package/bcrypt)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Sequelize](https://sequelize.org/)
+- [React.js](https://pt-br.reactjs.org/)
+
+## Tests With
+
+- [Mocha](https://mochajs.org/)
+- [Chai](https://www.chaijs.com/)
+- [Sinon](https://sinonjs.org/)
+
 ## Install
 
 This module depends upon a knowledge of [Markdown]().
