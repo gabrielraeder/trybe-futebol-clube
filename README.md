@@ -37,7 +37,7 @@ git clone git@github.com:gabrielraeder/trybe-futebol-clube.git
 cd trybe-futebol-clube
 ```
 
-3 - Install the dependencies
+3 - Install the dependencies _(if needed)_
 ```
 npm install
 ```
