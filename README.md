@@ -1,7 +1,10 @@
 # Trybe Futebol Clube
 
-Projeto desenvolvido no curso de desenvolvimento WEB da [Trybe](https://www.betrybe.com/) por  [Gabriel Gonçalves](https://www.linkedin.com/in/gabrielraedergoncalves/).
-Este projeto visa simular o funcionamento fullstack de uma tabela de um campeonato de futebol, sendo possível visualizar tabelas, também com filtros(casa e visitante), acessar como administrador para adicionar nova partida, editar placares de partidas em andamento e informar partidas como finalizadas.
+_Project developed while on [Trybe](https://www.betrybe.com/)_
+
+This project simulates a working Football Championship Table/Leaderboard. Being possible to visualize the table, with filters(home and away) as well, log as administrator to add new match, edit in progress match scores and change match status to finished.
+
+<hr/>
 
 ## Built With
 
@@ -24,20 +27,29 @@ Este projeto visa simular o funcionamento fullstack de uma tabela de um campeona
 
 ## Install
 
-1 - Clone o repositório
+1 - Clone the repository
 ```
 git clone git@github.com:gabrielraeder/trybe-futebol-clube.git
 ```
 
-2 - Entre na pasta do projeto
+2 - Enter repository directory
 ```
 cd trybe-futebol-clube
 ```
 
-3 - Suba os containers via Docker
+3 - Install the dependencies
+```
+npm install
+```
+
+4 - Run the following command to start the containers
 ```
 npm run compose:up
 ```
 
-A aplicação estará rodando em [http://localhost:3000](http://localhost:3000).
+The application will be running on [http://localhost:3000](http://localhost:3000).
+
+<hr/>
+
+**Developed By [Gabriel Gonçalves](https://www.linkedin.com/in/gabrielraedergoncalves/).**
 
