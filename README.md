@@ -1,13 +1,45 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# Trybe Futebol Clube
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+Projeto desenvolvido no curso de desenvolvimento WEB da [Trybe](https://www.betrybe.com/) por  [Gabriel Gonçalves](https://www.linkedin.com/in/gabrielraedergoncalves/).
+Este projeto visa simular o funcionamento fullstack de uma tabela de um campeonato de futebol, sendo possível visualizar tabelas, também com filtros(casa e visitante), acessar como administrador para adicionar nova partida, editar placares de partidas em andamento e informar partidas como finalizadas.
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+## Table of Contents
+
+- [Security](#security)
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Security
+
+### Any optional sections
+
+## Background
+
+### Any optional sections
+
+## Install
+
+This module depends upon a knowledge of [Markdown]().
+
+1 - Clone o repositório
+```
+git clone git@github.com:gabrielraeder/trybe-futebol-clube.git
+```
+
+2 - Entre na pasta do projeto
+```
+cd trybe-futebol-clube
+```
+
+3 - Suba os containers via Docker
+```
+npm run compose:up
+```
+
+A aplicação estará rodando em [http://localhost:3000](http://localhost:3000).
+### Any optional sections
+
