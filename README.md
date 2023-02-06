@@ -24,8 +24,6 @@ Este projeto visa simular o funcionamento fullstack de uma tabela de um campeona
 
 ## Install
 
-This module depends upon a knowledge of [Markdown]().
-
 1 - Clone o repositório
 ```
 git clone git@github.com:gabrielraeder/trybe-futebol-clube.git
